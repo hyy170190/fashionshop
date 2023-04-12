@@ -66,8 +66,10 @@ class ProductController extends Controller
             $oldImg = Product::where('id',$request->id)->first()->image;
             Storage::delete('public/product_img/' . $oldImg);
 
-            $newImg = uniqid().$request->file('image')->getClientOriginalName();
+            $newImg = uniqid() . $request->file('image')->getClientOriginalName();
+            $imageName = time() . '.' . $request->file('image')->getClientOriginalExtension();
             $request->file('image')->storeAs('public/product_img', $imageName);
+        
             $data['image'] = $newImg;
         }
 

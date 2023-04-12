@@ -125,7 +125,7 @@
                         <div class="header__nav__option ">
                             <a class="mobile-menu" href="#"><img src="{{ asset('user/img/icon/cart.png') }}" alt="">
                                 <span>0</span></a>
-                            <div class="price">$0.00</div>
+                            <div class="price">RM0.00</div>
                         </div>
                     </div>
                 @endauth

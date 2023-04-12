@@ -6,7 +6,7 @@ use App\Models\Cart;
 use App\Models\Contact;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Notifications\SendEmailNotification;
+//use App\Notifications\SendEmailNotification;
 use Illuminate\Support\Facades\Notification;
 
 

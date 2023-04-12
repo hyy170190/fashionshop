@@ -7,7 +7,7 @@
     <meta name="keywords" content="Male_Fashion, unica, creative, html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Male-Fashion | Template</title>
+    <title>Chic Fashion</title>
 
     {{-- CSS --}}
     @include('user.css')
@@ -35,12 +35,16 @@
                         </div>
                         <ul>
                             <li>
-                                <h4>America</h4>
-                                <p>195 E Parker Square Dr, Parker, CO 801 <br />+43 982-314-0958</p>
+                                <h4>Malaysia</h4>
+                                <p>Jalan Sungai Long, Bandar Sungai Long, 43000 Kajang, Selangor <br />+603-90860288</p>
                             </li>
                             <li>
-                                <h4>France</h4>
-                                <p>109 Avenue Léon, 63 Clermont-Ferrand <br />+12 345-423-9893</p>
+                                <h4>Türkiye</h4>
+                                <p>Kuloğlu, İstiklal Cd. No; 123-A, 34433 Beyoğlu/İstanbul <br />+902-122446255</p>
+                            </li>
+                            <li>
+                                <h4>United States</h4>
+                                <p>5606 Bay St, Emeryville, CA 94608, United States <br />+1 855-486-4756</p>
                             </li>
                         </ul>
                     </div>
@@ -54,10 +58,10 @@
                                     <input type="text" name="username" placeholder="Name">
                                 </div>
                                 <div class="col-lg-6">
-                                    <input type="text" name="email" placeholder="Email">
+                                    <input type="text" name="email" placeholder="Email" required>
                                 </div>
                                 <div class="col-lg-12">
-                                    <textarea name="message" placeholder="Message"></textarea>
+                                    <textarea name="message" placeholder="Message" required></textarea>
                                     <button type="submit" class="site-btn">Send Message</button>
                                 </div>
                             </div>

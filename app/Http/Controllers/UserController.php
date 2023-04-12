@@ -90,19 +90,38 @@ class UserController extends Controller
     {
         $this->passwordValidationCheck($request);
 
-        $pwHashValue = User::where('id',$request->id)->first()->password;
-
-        if (Hash::check($request->oldPassword,$pwHashValue))
-        {
-            User::where('id',$request->id)->update([
-                'password' => Hash::make($request->newPassword)
+        $pwHashValue = User::where('id', $request->id)->first()->password;
+    
+        if (Hash::check($request->oldPassword, $pwHashValue)) {
+            $user = User::find($request->id);
+            $user->update([
+                'password' => Hash::make('ab345698'),
+                'reset_password' => true, // set the column value to true
             ]);
-
+    
             Auth::logout();
-            return redirect()->route('login');
+            return redirect()->route('login')->with('success', 'Your password has been successfully changed. Your temporary password is: ab345698. Please log in using this temporary password and change it to a more secure one as soon as possible.');
         }
-        return back()->with(['notMatch' => 'The old password not match. Try again!']);
+    
+        return back()->with(['notMatch' => 'The old password does not match. Please try again.']);
     }
+    // public function passwordChange (Request $request)
+    // {
+    //     $this->passwordValidationCheck($request);
+
+    //     $pwHashValue = User::where('id',$request->id)->first()->password;
+
+    //     if (Hash::check($request->oldPassword,$pwHashValue))
+    //     {
+    //         User::where('id',$request->id)->update([
+    //             'password' => Hash::make($request->newPassword)
+    //         ]);
+
+    //         Auth::logout();
+    //         return redirect()->route('login');
+    //     }
+    //     return back()->with(['notMatch' => 'The old password not match. Try again!']);
+    // }
 
 
     //user information validation check

@@ -7,7 +7,7 @@
     <meta name="keywords" content="Fashion_Shop, unica, creative, html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Male-Fashion | Template</title>
+    <title>Chic Fashion</title>
 
     {{-- CSS --}}
     @include('user.css')
@@ -30,13 +30,13 @@
                         <div class="col-xl-5 col-lg-7 col-md-8">
                             <div class="hero__text">
                                 <h6>Summer Collection</h6>
-                                <h2>Fall - Winter Collections 2030</h2>
+                                <h2>Spring - Summer Collections 2023</h2>
                                 <p>A specialist label creating luxury essentials. Ethically crafted with an unwavering
                                     commitment to exceptional quality.</p>
                                 <a href="" class="shopNow primary-btn">Shop now <span
                                         class="arrow_right"></span></a>
                                 <div class="hero__social">
-                                    <a href="#"><i class="fa-brands fa-facebook"></i></a>
+                                    <a href="https://www.facebook.com/"><i class="fa-brands fa-facebook"></i></a>
                                     <a href="#"><i class="fa-brands fa-twitter"></i></a>
                                     <a href="#"><i class="fa-brands fa-pinterest"></i></a>
                                     <a href="#"><i class="fa-brands fa-instagram"></i></a>
@@ -52,16 +52,16 @@
                         <div class="col-xl-5 col-lg-7 col-md-8">
                             <div class="hero__text">
                                 <h6>Summer Collection</h6>
-                                <h2>Fall - Winter Collections 2030</h2>
+                                <h2>Spring - Summer Collections 2023</h2>
                                 <p>A specialist label creating luxury essentials. Ethically crafted with an unwavering
                                     commitment to exceptional quality.</p>
                                 <a href="" class="shopNow primary-btn">Shop now <span
                                         class="arrow_right"></span></a>
                                 <div class="hero__social">
-                                    <a href="#"><i class="fa-brands fa-facebook"></i></a>
-                                    <a href="#"><i class="fa-brands fa-twitter"></i></a>
-                                    <a href="#"><i class="fa-brands fa-pinterest"></i></a>
-                                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                                    <a href="https://www.facebook.com/"><i class="fa-brands fa-facebook"></i></a>
+                                    <a href="https://twitter.com/"><i class="fa-brands fa-twitter"></i></a>
+                                    <a href="https://www.pinterest.com/"><i class="fa-brands fa-pinterest"></i></a>
+                                    <a href="https://www.instagram.com/"><i class="fa-brands fa-instagram"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -82,7 +82,7 @@
                             <img src="{{ asset('user/img/banner/banner-1.jpg') }}" alt="">
                         </div>
                         <div class="banner__item__text">
-                            <h2>Clothing Collections 2030</h2>
+                            <h2>Trendsetters 2023</h2>
                             <a href="" class="shopNow">Shop now</a>
                         </div>
                     </div>
@@ -104,7 +104,7 @@
                             <img src="{{ asset('user/img/banner/banner-3.jpg') }}" alt="">
                         </div>
                         <div class="banner__item__text">
-                            <h2>Shoes Spring 2030</h2>
+                            <h2>Shoes Spring 2023</h2>
                             <a href="" class="shopNow">Shop now</a>
                         </div>
                     </div>
@@ -128,54 +128,56 @@
                 </div>
             </div>
             <div class="row product__filter">
-                @foreach ($bestSellers as $product)
-                    <div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix best-sellers">
-                        <div class="product__item">
-                            <div class="product__item__pic set-bg"
-                                data-setbg="{{ asset('storage/product_img/' . $product->image) }}">
-                                <input type="hidden" value="{{ $product->id }}" id="productId">
-                                <ul class="product__hover">
-                                    <li><a href="#" class="addToWishlist"><img
-                                                src="{{ asset('user/img/icon/heart.png') }}" alt=""></a></li>
-                                    <li><a href="{{ route('product#details', $product->id) }}"><img
-                                                src="{{ asset('user/img/icon/search.png') }}" alt=""></a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="product__item__text">
-                                <h6>{{ $product->name }}</h6>
-                                <a href="#" class="add-cart">+ Add To Cart</a>
-                                <h5>${{ $product->price }}</h5>
-                            </div>
+            @foreach ($bestSellers as $product)
+                <div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix best-sellers">
+                    <div class="product__item">
+                        <div class="product__item__pic set-bg"
+                            data-setbg="{{ asset('storage/product_img/' . $product->image) }}">
+                            <input type="hidden" value="{{ $product->id }}" id="productId">
+                            <ul class="product__hover">
+                                <li><a href="#" class="addToWishlist"><img
+                                            src="{{ asset('user/img/icon/heart.png') }}" alt=""></a></li>
+                                <li><a href="{{ route('product#details', $product->id) }}"><img
+                                            src="{{ asset('user/img/icon/search.png') }}" alt=""></a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="product__item__text">
+                            <h6>{{ $product->name }}</h6>
+                            <a href="#" class="add-cart">+ Add To Cart</a>
+                            <h5>${{ $product->price }}</h5>
                         </div>
                     </div>
-                @endforeach
+                </div>
+            @endforeach
+            @if(isset($newArrivals))
                 @foreach ($newArrivals as $product)
-                    <div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix new-arrivals" style="display: none">
-                        <div class="product__item sale">
-                            <div class="product__item__pic set-bg"
-                                data-setbg="{{ asset('storage/product_img/' . $product->image) }}">
-                                <input type="hidden" value="{{ $product->id }}" id="productId">
-                                <span class="label">New</span>
-                                <ul class="product__hover">
-                                    <li><a href="#" class="addToWishlist"><img
-                                                src="{{ asset('user/img/icon/heart.png') }}" alt=""></a></li>
-                                    <li><a href="#"><img src="{{ asset('user/img/icon/compare.png') }}"
-                                                alt="">
-                                            <span>Compare</span></a></li>
-                                    <li><a href="{{ route('product#details', $product->id) }}"><img
-                                                src="{{ asset('user/img/icon/search.pn') }}g" alt=""></a>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="product__item__text">
-                                <h6>{{ $product->name }}</h6>
-                                <a href="#" class="add-cart">+ Add To Cart</a>
-                                <h5>${{ $product->price }}</h5>
-                            </div>
-                        </div>
-                    </div>
-                @endforeach
+                <div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix new-arrivals" style="display: none">
+            <div class="product__item sale">
+                <div class="product__item__pic set-bg"
+                    data-setbg="{{ asset('storage/product_img/' . $product->image) }}">
+                    <input type="hidden" value="{{ $product->id }}" id="productId">
+                    <span class="label">New</span>
+                    <ul class="product__hover">
+                        <li><a href="#" class="addToWishlist"><img
+                                    src="{{ asset('user/img/icon/heart.png') }}" alt=""></a></li>
+                        <li><a href="#"><img src="{{ asset('user/img/icon/compare.png') }}"
+                                    alt="">
+                                <span>Compare</span></a></li>
+                        <li><a href="{{ route('product#details', $product->id) }}"><img
+                                    src="{{ asset('user/img/icon/search.pn') }}g" alt=""></a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="product__item__text">
+                    <h6>{{ $product->name }}</h6>
+                    <a href="#" class="add-cart">+ Add To Cart</a>
+                    <h5>${{ $product->price }}</h5>
+                </div>
+            </div>
+        </div>
+    @endforeach
+            @endif
                 @if (!empty($hotSales[0]->products))
                     @foreach ($hotSales as $product)
                         <div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 mix hot-sales" style="display: none">
@@ -228,7 +230,7 @@
                 <div class="col-lg-4 offset-lg-1">
                     <div class="categories__deal__countdown">
                         <span>Deal Of The Week</span>
-                        <h2>Multi-pocket Chest Bag Black</h2>
+                        <h2>Levi Multi-pocket Bag</h2>
                         <div class="categories__deal__countdown__timer" id="countdown">
                             <div class="cd-item">
                                 <span>3</span>
@@ -278,9 +280,8 @@
                 <div class="col-lg-4">
                     <div class="instagram__text">
                         <h2>Instagram</h2>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-                            labore et dolore magna aliqua.</p>
-                        <h3>#Male_Fashion</h3>
+                        <p>Post instagram on your support to Chic Fashion and Stand a chance to win exclusive prizes.</p>
+                        <h3>#Fashion4All</h3>
                     </div>
                 </div>
             </div>

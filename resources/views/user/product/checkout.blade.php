@@ -7,7 +7,7 @@
     <meta name="keywords" content="Male_Fashion, unica, creative, html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Male-Fashion | Template</title>
+    <title>Chic Fashion</title>
 
     @include('user.css')
 </head>
@@ -152,8 +152,7 @@
                                     <li>Subtotal <span>$ {{ $totalPrice }}</span></li>
                                     <li>Total <span id="totalPrice">$ {{ $totalPrice }}</span></li>
                                 </ul>
-                                <p>Lorem ipsum dolor sit amet, consectetur adip elit, sed do eiusmod tempor incididunt
-                                    ut labore et dolore magna aliqua.</p>
+                                <p>Returns only can be conducted within a week after payment</p>
                                 {{-- <div class="my-3">
                                     <a href="{{ route('user#payment') }}" class="text-info">Payment with Visa/Master
                                         Card</a>

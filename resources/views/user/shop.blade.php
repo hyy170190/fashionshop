@@ -7,7 +7,7 @@
     <meta name="keywords" content="Male_Fashion, unica, creative, html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Male-Fashion | Template</title>
+    <title>Chic Fashion</title>
 
     @include('user.css')
 </head>
@@ -83,20 +83,20 @@
                                             <div class="shop__sidebar__price">
                                                 <ul>
                                                     <li><a
-                                                            href="{{ route('product#filterByPrice', ['p1' => 0, 'p2' => 50]) }}">$0.00
-                                                            - $50.00</a></li>
+                                                            href="{{ route('product#filterByPrice', ['p1' => 0, 'p2' => 50]) }}">RM0.00
+                                                            - RM50.00</a></li>
                                                     <li><a
-                                                            href="{{ route('product#filterByPrice', ['p1' => 50, 'p2' => 100]) }}">$50.00
-                                                            - $100.00</a></li>
+                                                            href="{{ route('product#filterByPrice', ['p1' => 50, 'p2' => 100]) }}">RM50.00
+                                                            - RM100.00</a></li>
                                                     <li><a
-                                                            href="{{ route('product#filterByPrice', ['p1' => 100, 'p2' => 150]) }}">$100.00
-                                                            - $150.00</a></li>
+                                                            href="{{ route('product#filterByPrice', ['p1' => 100, 'p2' => 150]) }}">RM100.00
+                                                            - RM150.00</a></li>
                                                     <li><a
-                                                            href="{{ route('product#filterByPrice', ['p1' => 150, 'p2' => 200]) }}">$150.00
-                                                            - $200.00</a></li>
+                                                            href="{{ route('product#filterByPrice', ['p1' => 150, 'p2' => 200]) }}">RM150.00
+                                                            - RM200.00</a></li>
                                                     <li><a
-                                                            href="{{ route('product#filterByPrice', ['p1' => 200, 'p2' => 250]) }}">$200.00
-                                                            - $250.00</a></li>
+                                                            href="{{ route('product#filterByPrice', ['p1' => 200, 'p2' => 250]) }}">RM200.00
+                                                            - RM250.00</a></li>
                                                     <li><a
                                                             href="{{ route('product#filterByPrice', ['p1' => 250, 'p2' => 1000]) }}">250.00+</a>
                                                     </li>
@@ -167,7 +167,7 @@
                                                 <a href="#">Product</a>
                                                 <a href="#">Bags</a>
                                                 <a href="#">Shoes</a>
-                                                <a href="#">Fashio</a>
+                                                <a href="#">Fashion</a>
                                                 <a href="#">Clothing</a>
                                                 <a href="#">Hats</a>
                                                 <a href="#">Accessories</a>

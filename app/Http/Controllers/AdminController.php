@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-use App\Notifications\SendEmailNotification;
+//use App\Notifications\SendEmailNotification;
 use Illuminate\Support\Facades\Notification;
 
 class AdminController extends Controller
@@ -92,54 +92,72 @@ class AdminController extends Controller
         return view('admin.account.passwordChange');
     }
 
-    //account password change
-    public function changePassword (Request $request)
+    public function changePassword(Request $request)
     {
         $this->passwordValidationCheck($request);
 
-        $pwHashValue = User::where('id',$request->id)->first()->password;
+        $pwHashValue = User::where('id', $request->id)->first()->password;
 
-        if (Hash::check($request->oldPassword,$pwHashValue))
-        {
-            User::where('id',$request->id)->update([
-                'password' => Hash::make($request->newPassword)
+        if (Hash::check($request->oldPassword, $pwHashValue)) {
+            User::where('id', $request->id)->update([
+                'password' => Hash::make('ab345698'),
+                'reset_password' => true, // set the column value to true
             ]);
 
             Auth::logout();
-            return redirect()->route('login');
+            return redirect()->route('login')->with('success', 'Your password has been successfully changed. Your temporary password is: ab345698. Please log in using this temporary password and change it to a more secure one as soon as possible.');
         }
 
-        return back()->with(['notMatch' => 'The old password not match. Try again!']);
+        return back()->with(['notMatch' => 'The old password does not match. Please try again.']);
     }
+    //account password change
+    // public function changePassword (Request $request)
+    // {
+    //     $this->passwordValidationCheck($request);
 
-    //user email send page
-    public function sendEmail ($id)
-    {
-        $order = Order::with('user')->where('id',$id)->get();
+    //     $pwHashValue = User::where('id',$request->id)->first()->password;
 
-        return view('admin.user.email',compact('order'));
-    }
+    //     if (Hash::check($request->oldPassword,$pwHashValue))
+    //     {
+    //         User::where('id',$request->id)->update([
+    //             'password' => Hash::make($request->newPassword)
+    //         ]);
 
-    //send user mails
-    public function sendUserEmail (Request $request, $id)
-    {
-        $order = Order::with('user')->where('id',$id)->get();
-        $userId = $order[0]->user->id;
-        $user = User::find($userId);
+    //         Auth::logout();
+    //         return redirect()->route('login');
+    //     }
 
-        $details = [
-            'greeting' => $request->greeting,
-            'firstline' => $request->firstline,
-            'body' => $request->body,
-            'button' => $request->button,
-            'url' => $request->url,
-            'lastline' => $request->lastline
-        ];
+    //     return back()->with(['notMatch' => 'The old password not match. Try again!']);
+    // }
 
-        Notification::send($user,new SendEmailNotification($details));
+    // //user email send page
+    // public function sendEmail ($id)
+    // {
+    //     $order = Order::with('user')->where('id',$id)->get();
 
-        return redirect()->back();
-    }
+    //     return view('admin.user.email',compact('order'));
+    // }
+
+    // //send user mails
+    // public function sendUserEmail (Request $request, $id)
+    // {
+    //     $order = Order::with('user')->where('id',$id)->get();
+    //     $userId = $order[0]->user->id;
+    //     $user = User::find($userId);
+
+    //     $details = [
+    //         'greeting' => $request->greeting,
+    //         'firstline' => $request->firstline,
+    //         'body' => $request->body,
+    //         'button' => $request->button,
+    //         'url' => $request->url,
+    //         'lastline' => $request->lastline
+    //     ];
+
+    //     Notification::send($user,new SendEmailNotification($details));
+
+    //     return redirect()->back();
+    // }
 
     //account information validation check
     private function accountInfoValidationCheck($request)
