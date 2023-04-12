@@ -2,37 +2,17 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
-
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Product extends Model
 {
     use HasFactory;
-    protected $table = 'product';
-    protected $primaryKey = 'id';
-    protected $dateFormat = 'Y-m-d H:i:s';
 
-    protected $fillable = [
-        'product_name',
-        'type_name',
-        'description',
-        'price',
-        'quantity',
-        'deleted',
-    ];
+    protected $fillable = ['category_id', 'name', 'description', 'image', 'price', 'size', 'order_count'];
 
-    public function transaction()
+    public function category()
     {
-        return $this->hasMany('App\Models\Transaction', 'product_id', 'id');
-    }
-
-    public static function getRecord()
-    {
-        return DB::table('product')
-            ->where('deleted', 0)
-            ->orderby('id', 'asc')
-            ->paginate(5);
+        return $this->belongsTo(Category::class);
     }
 }
