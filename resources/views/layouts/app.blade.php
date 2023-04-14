@@ -9,7 +9,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>Fashion</title>
+    <title>Chic Fashion</title>
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
@@ -30,10 +30,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
     <style>
         .nav-link {
-            color: rgb(20, 22, 22) !important;
+            color: rgb(88, 213, 211);
         }
 
         .navbar-brand {
+            color: rgb(88, 213, 211);
             -webkit-user-select: none;
             -webkit-touch-callout: none;
             -moz-user-select: none;
@@ -48,7 +49,7 @@
         <nav class="navbar navbar-expand-md navbar-light bg-warning shadow-sm">
             <div class="container">
                 <a class="navbar-brand">
-                    Fashion
+                    Chic Fashion
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>

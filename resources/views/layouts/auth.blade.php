@@ -9,7 +9,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>Fashion</title>
+    <title>Chic Fashion</title>
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
@@ -36,7 +36,7 @@
 <body>
     <header class="navbar navbar-dark sticky-top bg-info flex-md-nowrap p-0 shadow"> 
          <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3">
-            Fashion
+            Chic Fashion
         </a>
         <nav class="navbar navbar-expand-md navbar-light bg-info shadow-sm">
             <div class="container">
