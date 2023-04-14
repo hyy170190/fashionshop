@@ -74,13 +74,8 @@ class RegisterController extends Controller
         ]);
     }
 
-    // might consider to remove soon
     public function showAdminRegisterForm(){
         return view('auth.register', ['url' => 'admin']);
-    }
-
-    public function showEmployeeRegisterForm(){
-        return view('auth.register', ['url' => 'employee']);
     }
 
     protected function createAdmin(Request $request){
@@ -91,15 +86,5 @@ class RegisterController extends Controller
             'password' => Hash::make($request->password),
         ]);
         return redirect()->intended('login/admin');
-    }
-
-    protected function createEmployee(Request $request){
-        $this->validator($request->all())->validate();
-        Employee::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
-        return redirect()->intended('login/employee');
     }
 }
