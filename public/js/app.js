@@ -6246,14 +6246,14 @@ var InventoryPage = /*#__PURE__*/function (_Component) {
                 children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("option", {
                   children: "Please choose 1"
                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("option", {
-                  value: "Graphic T-Shirts",
-                  children: " Graphic T-Shirts"
+                  value: "Top",
+                  children: " Top"
                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("option", {
-                  value: "Long Sleeve Shirts",
-                  children: " Long Sleeve Shirts"
+                  value: "Dress",
+                  children: " Dress"
                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("option", {
-                  value: "Polos",
-                  children: "Polos"
+                  value: "Bottom",
+                  children: "Bottom"
                 })]
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(reactstrap__WEBPACK_IMPORTED_MODULE_10__.Label, {
                 "for": "status",
@@ -6404,14 +6404,14 @@ var InventoryPage = /*#__PURE__*/function (_Component) {
                 children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("option", {
                   children: "Please choose 1"
                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("option", {
-                  value: "Graphic T-Shirts",
-                  children: "Graphic T-Shirts"
+                  value: "Top",
+                  children: " Top"
                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("option", {
-                  value: "Long Sleeve Shirts",
-                  children: "Long Sleeve Shirts"
+                  value: "Dress",
+                  children: " Dress"
                 }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)("option", {
-                  value: "Polos",
-                  children: "Polos"
+                  value: "Bottom",
+                  children: "Bottom"
                 })]
               }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(reactstrap__WEBPACK_IMPORTED_MODULE_10__.Label, {
                 "for": "status",
@@ -6459,7 +6459,7 @@ var InventoryPage = /*#__PURE__*/function (_Component) {
               onClick: this.editInventory.bind(this),
               size: "sm",
               color: "success",
-              children: " Edit "
+              children: " Update "
             }), " \xA0", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_9__.jsx)(reactstrap__WEBPACK_IMPORTED_MODULE_10__.Button, {
               onClick: this.toggleEditInventoryModal.bind(this),
               size: "sm",

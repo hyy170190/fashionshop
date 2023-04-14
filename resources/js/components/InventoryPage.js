@@ -167,9 +167,9 @@ export default class InventoryPage extends Component {
                                     this.setState({ newInventoryData });
                                 } }>
                                 <option>Please choose 1</option>
-                                <option value="Graphic T-Shirts"> Graphic T-Shirts</option>
-                                <option value="Long Sleeve Shirts"> Long Sleeve Shirts</option>
-                                <option value="Polos">Polos</option>
+                                <option value="Top"> Top</option>
+                                <option value="Dress"> Dress</option>
+                                <option value="Bottom">Bottom</option>
                             </Input>
                             <Label for="status">Status</Label>
                             <Input id="status" name="select" type="select" value={this.state.newInventoryData.status}
@@ -258,9 +258,9 @@ export default class InventoryPage extends Component {
                                     this.setState({ editInventoryData });
                                 } }>
                                 <option>Please choose 1</option>
-                                <option value="Graphic T-Shirts">Graphic T-Shirts</option>
-                                <option value="Long Sleeve Shirts">Long Sleeve Shirts</option>
-                                <option value="Polos">Polos</option>
+                                <option value="Top"> Top</option>
+                                <option value="Dress"> Dress</option>
+                                <option value="Bottom">Bottom</option>
                             </Input>
                             <Label for="status">Status</Label>
                             <Input id="status" name="select" type="select" value={this.state.editInventoryData.status}
@@ -283,7 +283,7 @@ export default class InventoryPage extends Component {
                         </FormGroup>
                     </ModalBody>
                     <ModalFooter>
-                        <Button onClick={this.editInventory.bind(this)} size="sm" color="success"> Edit </Button> &nbsp;
+                        <Button onClick={this.editInventory.bind(this)} size="sm" color="success"> Update </Button> &nbsp;
                         <Button onClick={this.toggleEditInventoryModal.bind(this)} size="sm" color="danger"> Cancel </Button>
                     </ModalFooter>
                 </Modal>
