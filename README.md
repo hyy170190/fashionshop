@@ -1,2 +1,2 @@
-# Wearable
+# Fashion
 Laravel Project
