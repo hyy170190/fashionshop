@@ -2,248 +2,211 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Cart;
-use App\Models\Review;
-use App\Models\Product;
-use App\Models\Category;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Storage;
+use App\Models\InventoryDetail;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use App\Models\Invoice;
+use App\Models\Order;
+
 
 class ProductController extends Controller
 {
-    //list page
-    public function list ()
+    public function filter(Request $request)
     {
-        $products = Product::with('category')
-                        ->when(request('key'), function($query){
-                            $query->where('products.name','like','%'.request('key').'%');
-                        })
-                        ->orderBy('products.created_at','desc')
-                        ->paginate(5);
-        return view('admin.product.list', compact('products'));
-    }
-
-    //create page
-    public function createPage ()
-    {
-        $categories = Category::select('id','name')->get();
-        return view('admin.product.create', compact('categories'));
-    }
-
-    //create product
-    public function create (Request $request)
-    {
-        $this->productValidationCheck($request,'create');
-        $data = $this->getProductInfo($request);
-
-        $imageName = uniqid().$request->file('image')->getClientOriginalName();
-        $request->file('image')->storeAs('public/product_img', $imageName);
-        $data['image'] = $imageName;
-
-        Product::create($data);
-        return redirect()->route('product#list');
-    }
-
-    //view edit poge
-    public function editPage ($id)
-    {
-        $data = Product::where('id',$id)->first();
-        $categories = Category::get();
-        return view('admin.product.edit', compact('data','categories'));
-    }
-
-    //update edited data of product
-    public function edit (Request $request)
-    {
-        $this->productValidationCheck($request,'update');
-        $data = $this->getProductInfo($request);
-
-        if ($request->hasFile('image'))
-        {
-            $oldImg = Product::where('id',$request->id)->first()->image;
-            Storage::delete('public/product_img/' . $oldImg);
-
-            $newImg = uniqid() . $request->file('image')->getClientOriginalName();
-            $imageName = time() . '.' . $request->file('image')->getClientOriginalExtension();
-            $request->file('image')->storeAs('public/product_img', $imageName);
-        
-            $data['image'] = $newImg;
+        $search = ['product_order_by' => 1];
+        if ($request->ajax()) { // filter function
+            session(['product_search' => [
+                'category' => $request->input('category'),
+                'product_order_by' => $request->input('order_by'),
+            ]]);
         }
+        $search = session('product_search') ? session('product_search') : $search;
+        $record = InventoryDetail::get_record($search);
+        return view('contents/product/filter', [
+            'product_order_by_sel' => ['1' => 'Low to high', '2' => 'High to Low'],
+            'category_sel' => [
+                ' ' => 'Please Select Category',
+                'Top' => 'Top',
+                'Dress' => 'Dress',
+                'Bottom' => 'Bottom',
+            ],
+            'search' => $search,
+            'record' => $record,
+        ]);
+    } //
 
-        Product::where('id',$request->id)->update($data);
-        return redirect()->route('product#list');
-    }
-
-    //delete product
-    public function delete ($id)
+    public function detail($id, Request $request)
     {
-        $image = Product::where('id',$id)->first()->image;
-
-        Product::where('id',$id)->delete();
-        Storage::delete('public/product_img/' . $oldImg);
-
-        return redirect()->route('product#list');
-    }
-
-    //filter products by category
-    public function filterByCategory ($categoryId)
-    {
-        $products = Product::where('category_id',$categoryId)->orderBy('products.price', 'asc')->paginate(12);
-        $categories = Category::with('products')->get();
-        $cart = Cart::where('user_id', Auth::user()->id)->with('products')->get();
-
-        $totalPrice = 0;
-        foreach ($cart as $c)
-        {
-            $totalPrice += $c->quantity * $c->products[0]->price;
+        $record = InventoryDetail::find($request->input('id'));
+        if (!$record) {
+            $records = InventoryDetail::find($id);
+            if (!$records) {
+                Session::flash('fail_msg', 'Invalid Record, please try again later.');
+                return redirect()->route('product_filter');
+            }
         }
-
-        return view('user.shop', compact('products', 'categories','cart','totalPrice'));
+        return view('contents/product/detail', [
+            'record' => $record ?? $records,
+            'size' => [
+                '' => 'Please select size',
+                'S' => 'S',
+                'M' => 'M',
+                'L' => 'L',
+            ],
+        ]);
     }
 
-    //filter products by price
-    public function filterByPrice ($p1,$p2)
+    public function order(Request $request)
     {
-        $p1 = (int)$p1;
-        $p2 = (int)$p2;
-
-        $products = Product::whereBetween('price', [$p1, $p2])->orderBy('products.price', 'asc')->paginate(12);
-        $categories = Category::with('products')->get();
-        $cart = Cart::where('user_id', Auth::user()->id)->with('products')->get();
-
-        $totalPrice = 0;
-        foreach ($cart as $c)
-        {
-            $totalPrice += $c->quantity * $c->products[0]->price;
+        $validator = null;
+        if ($request->isMethod('post')) {
+            $submit_type = $request->input('submit');
+            switch ($submit_type) {
+                case 'add':
+                    $data = InventoryDetail::find($request->input('id'));
+                    $post = (object) $request->all();
+                    $validator = Validator::make($request->all(), [
+                        'size' => "required",
+                        'quantity' => 'required|gt:0',
+                    ])->setAttributeNames([
+                        'size' => 'Size',
+                        'quantity' => 'Quantity',
+                    ]);
+                    if (!$validator->fails()) {
+                        $cart = session()->get('cart');
+                        if (!$cart) {
+                            $cart = [
+                                $data->id . $request->input('size') => [
+                                    "id" => $data->id,
+                                    "name" => $data->name,
+                                    "quantity" => $request->input('quantity'),
+                                    "size" => $request->input('size'),
+                                    "unit_price" => $data->unit_price
+                                ]
+                            ];
+                            session()->put('cart', $cart);
+                            Session::flash('success_msg', 'Product added to cart');
+                            return view('contents/product/order');
+                        }
+                        // if cart not empty then check if this product exist
+                        if (isset($cart[$data->id . $request->input('size')]) && $cart[$data->id . $request->input('size')]['size'] == $request->input('size')) {
+                            $cart[$data->id . $request->input('size')]['quantity'] = $cart[$data->id . $request->input('size')]['quantity'] + $request->input('quantity');
+                            session()->put('cart', $cart);
+                            Session::flash('success_msg', 'Product added to cart');
+                            return view('contents/product/order');
+                        }
+                        $cart[$data->id . $request->input('size')] = [
+                            "id" => $data->id,
+                            "name" => $data->name,
+                            "quantity" => $request->input('quantity'),
+                            "size" => $request->input('size'),
+                            "unit_price" => $data->unit_price
+                        ];
+                        session()->put('cart', $cart);
+                        Session::flash('success_msg', 'Product added to cart');
+                        return view('contents/product/order');
+                    }
+                    return view("contents/product/detail", [
+                        'id' => $request->input('id'),
+                        'post' => $post,
+                        'record' => $data,
+                        'size' => [
+                            '' => 'Please select size',
+                            'S' => 'S',
+                            'M' => 'M',
+                            'L' => 'L',
+                        ],
+                    ])->withErrors($validator);
+                    break;
+                case 'cancel':
+                    return redirect(route('product_filter'));
+                    break;
+            }
         }
-
-        return view('user.shop', compact('products', 'categories','cart','totalPrice'));
+        return view('contents/product/order');
     }
 
-    //filter product by size
-    public function filterBySize ($para)
+    public function delete_order(Request $request)
     {
-        $products = Product::where('size',$para)->orderBy('products.price', 'asc')->paginate(12);
-        $categories = Category::with('products')->get();
-        $cart = Cart::where('user_id', Auth::user()->id)->with('products')->get();
-
-        $totalPrice = 0;
-        foreach ($cart as $c)
-        {
-            $totalPrice += $c->quantity * $c->products[0]->price;
+        $cart = session()->get('cart');
+        if (isset($cart[$request->input('data')])) {
+            unset($cart[$request->input('data')]);
+            session()->put('cart', $cart);
         }
-
-        return view('user.shop', compact('products', 'categories','cart','totalPrice'));
+        Session::flash('success_msg', 'Product deleted');
+        return view('contents/product/order');
     }
 
-    //sorting products by price
-    public function sortingByPrice ($para)
+    public function submit_order(Request $request)
     {
-        $products = Product::orderBy('price', $para)->orderBy('products.price', 'asc')->paginate(12);
-        $categories = Category::with('products')->get();
-        $cart = Cart::where('user_id', Auth::user()->id)->with('products')->get();
+        if ($request->isMethod('post')) {
+            $submit_type = $request->input('submit');
+            switch ($submit_type) {
+                case 'add':
+                    return redirect(route('product_filter'));
+                case 'clear':
+                    Session::forget('cart');
+                    Session::flash('success_msg', 'Product order cleared');
+                    return redirect(route('product_order'));
+                    break;
+                case 'company':
+                    return view('contents/product/company', [
+                        'id' => $request->input('id'),
+                        'quantity' => $request->input('quantity'),
+                        'size' => $request->input('size'),
+                        'unit_price' => $request->input('unit_price'),
+                        'subtotal' => $request->input('subtotal'),
+                        'total' => $request->input('total')
+                    ]);
+                    break;
+                case 'submit':
+                    $post = (object) $request->all();
+                    $validator = Validator::make($request->all(), [
+                        'company' => "required",
+                        'address' => 'required',
+                        'phone' => 'required|numeric|regex:/(01)[0-9]{9}/',
+                    ])->setAttributeNames([
+                        'company' => 'Company',
+                        'address' => 'Address',
+                        'phone' => 'Phone',
+                    ]);
+                    if (!$validator->fails()) {
+                        Invoice::create([
+                            'invoice_total' => $request->input('total'),
+                            'name' => Auth::user()->name,
+                            'company_name' => $request->input('company'),
+                            'address' => $request->input('address'),
+                            'phone' => $request->input('phone'),
+                            'user_id' => Auth::user()->id,
+                        ]);
 
-        $totalPrice = 0;
-        foreach ($cart as $c)
-        {
-            $totalPrice += $c->quantity * $c->products[0]->price;
+                        $invoice = DB::table('invoices')->latest()->first();
+                        foreach ($request->input('id') as $key => $value) {
+                            Order::create([
+                                'InvoiceID' => $invoice->id,
+                                'ItemID' => $value,
+                                'Size' => $request->input('size')[$key],
+                                'Qty' => $request->input('quantity')[$key],
+                            ]);
+                        }
+                        Session::forget('cart');
+                        Session::flash('success_msg', 'Order Placed');
+                        return view('contents/product/order');
+                    }
+                    return view('contents/product/company', [
+                        'post' => $post,
+                        'id' => $request->input('id'),
+                        'quantity' => $request->input('quantity'),
+                        'size' => $request->input('size'),
+                        'unit_price' => $request->input('unit_price'),
+                        'subtotal' => $request->input('subtotal'),
+                        'total' => $request->input('total')
+                    ])->withErrors($validator);
+                    break;
+            }
         }
-
-        return view('user.shop', compact('products', 'categories','cart','totalPrice','para'));
-    }
-
-    //view product details
-    public function details ($id)
-    {
-        $product = Product::where('id',$id)->first();
-        $cart = Cart::where('user_id', Auth::user()->id)->with('products')->get();
-
-        $totalPrice = 0;
-        foreach ($cart as $c)
-        {
-            $totalPrice += $c->quantity * $c->products[0]->price;
-        }
-
-        $relatedProducts = Product::where('category_id',$product->category_id)
-                                ->whereNot('id',$id)
-                                ->get();
-
-        $reviews = Review::where('product_id',$id)->with('user')->paginate(3);
-
-        return view('user.product.details', compact('product','relatedProducts','cart','totalPrice','reviews'));
-    }
-
-    //product review by user
-    public function review (Request $request)
-    {
-        $data = [
-            'user_id' => Auth::user()->id,
-            'product_id' => $request->productId,
-            'review' => $request->review
-        ];
-
-        Review::create($data);
-
-        return back();
-    }
-
-    //admin UI user reviews lists
-    public function userReviewLists ()
-    {
-        $reviews = Review::query()->with('user', 'product');
-
-        if (!empty(request('key'))){
-            $key = request('key');
-
-            $reviews = $reviews->orWhereHas('user', function($query) use ($key) {
-                                    $query->where('name','like','%'.$key.'%');
-                                })->orWhereHas('product', function($query) use ($key) {
-                                    $query->where('name','like','%'.$key.'%');
-                                })->orWhere('reviews.review','like','%'.$key.'%');
-        }
-
-        $reviews = $reviews->paginate(4);
-
-        $reviews->appends(request()->all());
-
-        return view('admin.user.review',compact('reviews'));
-    }
-
-    //delete user review
-    public function deleteReview (Request $request)
-    {
-        Review::where('id', $request->id)->delete();
-
-        return response()->json(['msg' => 'success'], 200);
-    }
-
-    //product validation check
-    private function productValidationCheck ($request,$action)
-    {
-        $validationRules = [
-            'name' => 'required|unique:products,name,' . $request->id,
-            'description' => 'required',
-            'price' => 'required',
-            'size' => 'required',
-            'category' => 'required',
-        ];
-        $validationRules['image'] = $action == 'create' ? 'required' : '' ;
-
-        Validator::make($request->all(), $validationRules)->validate();
-    }
-
-    //get product information
-    private function getProductInfo ($request)
-    {
-        return [
-            'category_id' => $request->category,
-            'name' => $request->name,
-            'description' => $request->description,
-            'price' => $request->price,
-            'size' => $request->size,
-        ];
     }
 }

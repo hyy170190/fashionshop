@@ -4,23 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Notifications\Notifiable;
 
 class Order extends Model
 {
+    protected $table = 'orders';
+    protected $fillable = ['InvoiceID', 'ItemID', 'Size', 'Qty', 'created_at', 'updated_at',];
     use HasFactory;
-
-    use Notifiable;
-
-    protected $fillable = ['user_id', 'order_code', 'total_price', 'status','deliever'];
-
-    public function user ()
+    public function Invoice()
     {
-        return $this->belongsTo(User::class);
-    }
-
-    public function billingDetails ()
-    {
-        return $this->hasOne(BillingDetails::class,'order_code', 'order_code');
+        return $this->belongsTo(Invoice::class, 'InvoiceID');
     }
 }
