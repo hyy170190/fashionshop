@@ -33,8 +33,3 @@ Route::get('/adminaccount', [AdminController::class, 'index']);
 Route::post('/adminaccount/create', [AdminController::class, 'create']);
 Route::delete('/adminaccount/delete/{id}', [AdminController::class, 'delete']);
 Route::put('/adminaccount/update/{id}', [AdminController::class, 'update']);
-
-Route::get('/employeeaccount', [EmployeeController::class, 'index']);
-Route::post('/employeeaccount/create', [EmployeeController::class, 'create']);
-Route::delete('/employeeaccount/delete/{id}', [EmployeeController::class, 'delete']);
-Route::put('/employeeaccount/update/{id}', [EmployeeController::class, 'update']);

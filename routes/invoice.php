@@ -4,7 +4,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\OrderController;
 
-//YY
 Route::group(['middleware' => 'can:isAdmin'], function() {
     Route::get("/admin/invoicelist", [InvoiceController::class, "listInvoice"]);
 });
